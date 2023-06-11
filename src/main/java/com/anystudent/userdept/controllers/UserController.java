@@ -2,42 +2,50 @@ package com.anystudent.userdept.controllers;
 
 import com.anystudent.userdept.entities.User;
 import com.anystudent.userdept.repositories.UserRepository;
+import com.anystudent.userdept.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
-
     @Autowired
-    private UserRepository repository;
+    private UserService userService;
+
+    @ResponseBody
     @GetMapping
-    public List<User> findAll(){
-        List<User> result = repository.findAll();
-        return result;
+    public ResponseEntity<?> userFindAll(){
+        List<User> userList = userService.findAll();
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
-    public User findById(@PathVariable Long id){
-        User result = repository.findById(id).get();
-        return result;
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<Optional<User>> findById(@PathVariable Long id){
+        Optional<User> userById = userService.userFindById(id);
+        return new ResponseEntity<>(userById,HttpStatus.OK);
     }
     @PostMapping
-    public User insert(@RequestBody User user){
-        User result = repository.save(user);
-        return result;
+    public ResponseEntity<User> newUser(@RequestBody User newUser){
+        User user = userService.mergeUser(newUser);
+        return new ResponseEntity<>(user,HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/{id}")
-    public User update(@RequestBody User user){
-        User result = repository.save(user);
-        return result;
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<User> updateUser(@RequestBody User putUser){
+        User user = userService.mergeUser(putUser);
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id){
-       repository.deleteById(id);
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id){
+       userService.deleteUserById(id);
+
+       return ResponseEntity.ok("Successfully deleted user");
     }
 }

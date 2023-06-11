@@ -1,53 +1,29 @@
 package com.anystudent.userdept.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String email;
+    @Column(name = "ID")
+    private Long userId;
+    @Column(name = "NAME")
+    private String userName;
+    @Column(name = "EMAIL")
+    private String userEmail;
     @ManyToOne
-    @JoinColumn(name = "department_id")
-    private Department department;
+    @JoinColumn(name = "FK_IDDEPARTMENT")
+    private Department userDepartment;
 
-    public User(){
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
 }
