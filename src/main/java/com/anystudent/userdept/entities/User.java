@@ -1,7 +1,15 @@
 package com.anystudent.userdept.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_user")
 public class User {
@@ -14,7 +22,8 @@ public class User {
     private String userName;
     @Column(name = "EMAIL")
     private String userEmail;
-    @JoinColumn(name = "FK_IDDEPARTMENT")
+
+    @Column(name = "FK_IDDEPARTMENT")
     private Long userDepartment;
 
 }

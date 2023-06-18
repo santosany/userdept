@@ -1,15 +1,10 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import com.anystudent.userdept.entities.Department;
 import com.anystudent.userdept.entities.User;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 public class UserTest {
-
-    Department department = new Department(1L,"IT");
 
     User user =  new User(1L,"Maria","maria@gmail.com",1L);
 
@@ -28,8 +23,8 @@ public class UserTest {
         assertEquals("maria@gmail.com", user.getUserEmail());
     }
 
-//    @Test
-//    public void getUserDepartmentNome(){
-//        assertEquals(1L,user.getUserDepartment());
-//    }
+    @Test
+    public void getUserDepartmentNome(){
+        assertEquals(1L,user.getUserDepartment());
+    }
 }

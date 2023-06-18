@@ -1,5 +1,6 @@
 package com.anystudent.userdept.controllers;
 
+import com.anystudent.userdept.dto.UserDTO;
 import com.anystudent.userdept.entities.User;
 import com.anystudent.userdept.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +34,15 @@ public class UserController {
     }
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
-    public ResponseEntity<User> newUser(@RequestBody User newUser){
-        User user = userService.mergeUser(newUser);
-        return new ResponseEntity<>(user,HttpStatus.CREATED);
+    public ResponseEntity<User> newUser(@RequestBody UserDTO newUser) {
+        User user = userService.saveUser(newUser);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<User> updateUser(@RequestBody User putUser){
-        User user = userService.mergeUser(putUser);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody UserDTO newUser) {
+        User user = userService.updateUser(Long.parseLong(id), newUser);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")

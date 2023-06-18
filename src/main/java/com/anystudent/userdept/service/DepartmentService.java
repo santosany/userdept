@@ -1,5 +1,8 @@
 package com.anystudent.userdept.service;
 
+import com.anystudent.userdept.dto.DepartmentDTO;
+import com.anystudent.userdept.dto.UserDTO;
+import com.anystudent.userdept.dto.UserMapperDTO;
 import com.anystudent.userdept.entities.Department;
 import com.anystudent.userdept.entities.User;
 import com.anystudent.userdept.repositories.DepartmentRepository;
@@ -17,6 +20,8 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    private DepartmentDTO departmentDTO;
+
     public List<Department> findAll(){
         return departmentRepository.findAll();
     }
@@ -25,20 +30,33 @@ public class DepartmentService {
         return departmentRepository.findById(id);
     }
 
-    public Department mergeDepartment(Department newDepartment) {
+    public Department saveDepartment(DepartmentDTO newDepartment) {
+        Department department = new Department();
+        department.setName(newDepartment.getName());
 
-        if (newDepartment.getId() == null) {
-            Department department = departmentRepository.save(newDepartment);
-            return department;
+        departmentRepository.save(department);
+
+        return  department;
+    }
+
+    public Department updateDepartment(long id, DepartmentDTO updatedDepartment) {
+        Optional<Department> findDepartment = departmentFindById(id);
+
+        Department department = new Department();
+        department.setId(updatedDepartment.getId());
+        department.setName(updatedDepartment.getName());
+
+        if (findDepartment.isPresent()) {
+            department.setId(id);
+
+
+            departmentRepository.save(department);
         } else {
-            Optional<Department> findDepartment = departmentFindById(newDepartment.getId());
-            if(findDepartment.isPresent()){
-                Department departmentSave = departmentRepository.save(newDepartment);
-                return departmentSave;
-            }else{
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct Department Id", null);
-            }
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct User Id", null);
         }
+
+        return department;
+
     }
 
     public void deleteUserById(Long id){

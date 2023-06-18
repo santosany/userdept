@@ -1,7 +1,10 @@
 package com.anystudent.userdept.service;
 
 import com.anystudent.userdept.dto.UserDTO;
+import com.anystudent.userdept.dto.UserMapperDTO;
+import com.anystudent.userdept.entities.Department;
 import com.anystudent.userdept.entities.User;
+import com.anystudent.userdept.repositories.DepartmentRepository;
 import com.anystudent.userdept.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,45 +17,61 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private UserRepository repository;
+    private UserRepository userRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
     private UserDTO userDTO;
 
+    private UserMapperDTO userMapperDTO;
+
     public List<User> findAll(){
-        return repository.findAll();
+
+        return userRepository.findAll();
     }
 
     public Optional<User> userFindById(Long id){
-        if(repository != null) {
-            return repository.findById(id);
-        }
-        return null;
+
+        return userRepository.findById(id);
+
     }
 
-    public User mergeUser(UserDTO newUser) {
+    public User saveUser(UserDTO newUser) {
 
-        UserDTO userDTO = new UserDTO();
-
-
-        if (newUser.getId() == null) {
-
-            UserDTO user = repository.save(newUser);
-            return user;
-        } else {
-            Optional<User> findUser = userFindById(newUser.getId());
-            if(findUser.isPresent()){
-                User userSave = repository.save(newUser);
-                return userSave;
-            }else{
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct User Id", null);
-            }
+        User user = userMapperDTO.userDtoToUser(newUser);
+        Optional<Department> byId = departmentRepository.findById(user.getUserDepartment());
+        if (!byId.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Departamento não encontrado.", null);
         }
+
+         userRepository.save(user);
+
+        return user;
+
+    }
+
+    public User updateUser(long id, UserDTO updatedUser) {
+        Optional<User> findUser = userFindById(id);
+
+        User user;
+
+        if (findUser.isPresent()) {
+            user = UserMapperDTO.userDtoToUser(updatedUser);
+            user.setUserId(id);
+
+            userRepository.save(user);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct User Id", null);
+        }
+
+        return user;
+
     }
 
     public void deleteUserById(Long id){
         Optional<User> user = userFindById(id);
 
         if(user.isPresent()){
-            repository.delete(user.get());
+            userRepository.delete(user.get());
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provide correct User Id", null);
         }
