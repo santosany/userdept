@@ -1,11 +1,9 @@
 package com.anystudent.userdept.controllers;
 
 import com.anystudent.userdept.entities.User;
-import com.anystudent.userdept.repositories.UserRepository;
 import com.anystudent.userdept.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

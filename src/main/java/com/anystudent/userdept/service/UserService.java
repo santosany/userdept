@@ -1,5 +1,6 @@
 package com.anystudent.userdept.service;
 
+import com.anystudent.userdept.dto.UserDTO;
 import com.anystudent.userdept.entities.User;
 import com.anystudent.userdept.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,30 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private UserRepository repository;
+    private UserDTO userDTO;
 
     public List<User> findAll(){
         return repository.findAll();
     }
 
     public Optional<User> userFindById(Long id){
-        return repository.findById(id);
+        if(repository != null) {
+            return repository.findById(id);
+        }
+        return null;
     }
 
-    public User mergeUser(User newUser) {
+    public User mergeUser(UserDTO newUser) {
 
-        if (newUser.getUserId() == null) {
-            User user = repository.save(newUser);
+        UserDTO userDTO = new UserDTO();
+
+
+        if (newUser.getId() == null) {
+
+            UserDTO user = repository.save(newUser);
             return user;
         } else {
-            Optional<User> findUser = userFindById(newUser.getUserId());
+            Optional<User> findUser = userFindById(newUser.getId());
             if(findUser.isPresent()){
                 User userSave = repository.save(newUser);
                 return userSave;
