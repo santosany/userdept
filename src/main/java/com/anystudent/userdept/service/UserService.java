@@ -20,7 +20,7 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
-    private UserDTO userDTO;
+
 
     private UserMapperDTO userMapperDTO;
 

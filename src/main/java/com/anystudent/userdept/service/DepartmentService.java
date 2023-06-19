@@ -1,10 +1,7 @@
 package com.anystudent.userdept.service;
 
 import com.anystudent.userdept.dto.DepartmentDTO;
-import com.anystudent.userdept.dto.UserDTO;
-import com.anystudent.userdept.dto.UserMapperDTO;
 import com.anystudent.userdept.entities.Department;
-import com.anystudent.userdept.entities.User;
 import com.anystudent.userdept.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,7 +56,7 @@ public class DepartmentService {
 
     }
 
-    public void deleteUserById(Long id){
+    public void deleteDepartmentById(Long id){
         Optional<Department> department = departmentFindById(id);
 
         if(department.isPresent()){

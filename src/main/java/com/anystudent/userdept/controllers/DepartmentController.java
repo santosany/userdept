@@ -2,7 +2,6 @@ package com.anystudent.userdept.controllers;
 
 import com.anystudent.userdept.dto.DepartmentDTO;
 import com.anystudent.userdept.entities.Department;
-import com.anystudent.userdept.entities.User;
 import com.anystudent.userdept.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +50,7 @@ public class DepartmentController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<String> deleteUser(@PathVariable Long id){
-        departmentService.deleteUserById(id);
+        departmentService.deleteDepartmentById(id);
 
         return ResponseEntity.ok("Successfully deleted user");
     }
